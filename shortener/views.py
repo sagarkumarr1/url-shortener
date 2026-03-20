@@ -11,18 +11,30 @@ def generate_short_code():
 def home(request):
     if request.method == 'POST':
         original_url = request.POST.get('url')
-        short_code = generate_short_code()
-        url_obj = URL.objects.create(
-            original_url=original_url,
-            short_code=short_code
-        )
-        short_url = f"http://127.0.0.1:8000/{short_code}"
+        urls = URL.objects.all().order_by('-created_at')
+        existing = URL.objects.filter(original_url=original_url).first()
+        
+        if existing:
+            url_obj = existing
+        else:
+            short_code = generate_short_code()
+            url_obj = URL.objects.create(
+                original_url=original_url,
+                short_code=short_code
+            )
+        
+        # Yeh 3 lines add karo yahan — POST block ke andar
+        short_url = f"http://127.0.0.1:8000/{url_obj.short_code}"
         return render(request, 'shortener/home.html', {
             'short_url': short_url,
-            'original_url': original_url
+            'original_url': original_url,
+            'urls': urls 
         })
     
-    return render(request, 'shortener/home.html')
+    # Yeh GET ke liye — bahar rahega
+    urls = URL.objects.all().order_by('-created_at')
+    return render(request, 'shortener/home.html', {'urls': urls})
+    
 
 def redirect_url(request, short_code):
     try:

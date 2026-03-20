@@ -43,6 +43,7 @@
         .result a { color: #1a5fa8; word-break: break-all; }
     </style>
 </head>
+
 <body>
     <h1>URL Shortener</h1>
     
@@ -65,5 +66,36 @@
         </p>
     </div>
     {% endif %}
+    {% if urls %}
+<div style="margin-top: 40px;">
+    <h3 style="color: #1a5fa8;">All Shortened URLs</h3>
+    <table style="width:100%; border-collapse: collapse; background: white; border-radius: 8px;">
+        <thead>
+            <tr style="background: #1a5fa8; color: white;">
+                <th style="padding: 12px; text-align: left;">Short Code</th>
+                <th style="padding: 12px; text-align: left;">Original URL</th>
+                <th style="padding: 12px; text-align: center;">Clicks</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for url in urls %}
+            <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 12px;">
+                    <a href="http://127.0.0.1:8000/{{ url.short_code }}">
+                        {{ url.short_code }}
+                    </a>
+                </td>
+                <td style="padding: 12px; word-break: break-all;">
+                    {{ url.original_url|truncatechars:50 }}
+                </td>
+                <td style="padding: 12px; text-align: center;">
+                    {{ url.click_count }}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
 </body>
 </html>
