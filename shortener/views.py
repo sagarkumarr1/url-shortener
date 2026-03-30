@@ -23,7 +23,7 @@ def home(request):
                 short_code=short_code
             )
         
-        # Yeh 3 lines add karo yahan — POST block ke andar
+      
         short_url = f"http://127.0.0.1:8000/{url_obj.short_code}"
         return render(request, 'shortener/home.html', {
             'short_url': short_url,
@@ -31,7 +31,7 @@ def home(request):
             'urls': urls 
         })
     
-    # Yeh GET ke liye — bahar rahega
+
     urls = URL.objects.all().order_by('-created_at')
     return render(request, 'shortener/home.html', {'urls': urls})
     
